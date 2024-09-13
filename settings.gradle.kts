@@ -1,6 +1,3 @@
-import java.io.FileInputStream
-import java.util.Properties
-
 pluginManagement {
     repositories {
         google {
@@ -12,18 +9,6 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
-        maven {
-            val keyPropertiesFile = File("local.properties")
-            val keyProperties = Properties()
-            keyProperties.load(FileInputStream(keyPropertiesFile))
-
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/nalivajr/modules-playground-logger")
-            credentials {
-                username = keyProperties.get("GIT_USER").toString()
-                password = keyProperties.get("GIT_TOKEN").toString()
-            }
-        }
     }
 }
 dependencyResolutionManagement {
@@ -31,9 +16,20 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven {
+            val keyPropertiesFile = File("local.properties")
+            val keyProperties = java.util.Properties()
+            keyProperties.load(java.io.FileInputStream(keyPropertiesFile))
+
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/nalivajr/modules-playground-logger")
+            credentials {
+                username = keyProperties["GIT_USER"].toString()
+                password = keyProperties["GIT_TOKEN"].toString()
+            }
+        }
     }
 }
 
 rootProject.name = "playground-app"
 include(":app")
- 
